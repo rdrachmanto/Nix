@@ -8,7 +8,7 @@ This is my NixOS desktop, to be used together with [[https://github.com/rdrachma
 ** Reproducing
 
 1. Add these inside ~/etc/nixos/configuration.nix~ and rebuild
-   
+     
    #+BEGIN_SRC nix
    environment.systemPackages = with pkgs; [
      wget
@@ -25,7 +25,7 @@ This is my NixOS desktop, to be used together with [[https://github.com/rdrachma
 2. Clone this repository
 
 3. Run the flake command to rebuild the system
-
+     
    #+BEGIN_SRC bash
    sudo nixos-rebuild switch --flake ~/Nix#thinkpad
    #+END_SRC
