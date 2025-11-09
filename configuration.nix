@@ -5,16 +5,16 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "rd-thinkpad"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -52,8 +52,11 @@
   users.users.rdrachmanto = {
     isNormalUser = true;
     description = "Rakandhiya Daanii Rachmanto";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
+    packages = with pkgs; [ ];
   };
 
   # Allow unfree packages
@@ -62,90 +65,95 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-     wget
-     curl
-     git
-     tmux
-     fzf
-     fd
-     ripgrep
-     cliphist
-     nmap     
-     polkit
-     stow
-     lshw
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
+    wget
+    curl
+    git
+    tmux
+    fzf
+    fd
+    ripgrep
+    cliphist
+    nmap
+    polkit
+    stow
+    lshw
 
-     # Desktop
-     firefox
-     alacritty
-     swww
-     swaylock
-     waybar
-     mako
-     fuzzel
-     rofi
-     networkmanager
-     networkmanagerapplet
-     blueman
-     pulsemixer
-     nautilus
-     udiskie
-     mpv
-     zathura
+    # Desktop
+    firefox
+    alacritty
+    swww
+    swaylock
+    waybar
+    mako
+    fuzzel
+    rofi
+    networkmanager
+    networkmanagerapplet
+    blueman
+    pulsemixer
+    nautilus
+    udiskie
+    mpv
+    zathura
 
-     # Niceties
-     starship
-     bat
-     btop
-     fastfetch
+    # Niceties
+    starship
+    bat
+    btop
+    fastfetch
 
-     # Editors
-     emacs
-     neovim
+    # Editors
+    emacs
+    neovim
 
-     # Programming languages
-     rustup
+    # Programming languages
+    rustup
+    nil
+    nixfmt
 
-     # Niri-specific
-     xwayland
-     xwayland-satellite
+    # Niri-specific
+    xwayland
+    xwayland-satellite
   ];
 
-  programs =  {
-     nix-ld.enable = true;
-     niri.enable = true;
-     xwayland.enable = true;
+  programs = {
+    nix-ld.enable = true;
+    niri.enable = true;
+    xwayland.enable = true;
   };
 
   fonts = {
-     fontconfig.enable = true;
-     packages = with pkgs; [
-        nerd-fonts.zed-mono
-        nerd-fonts.iosevka-term
-        nerd-fonts.jetbrains-mono 
-     ];
+    fontconfig.enable = true;
+    packages = with pkgs; [
+      nerd-fonts.zed-mono
+      nerd-fonts.iosevka-term
+      nerd-fonts.jetbrains-mono
+    ];
   };
 
   xdg.portal = {
-     enable = true;
-     extraPortals = with pkgs; [
-	xdg-desktop-portal-gtk
-     ];
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
   };
-  
+
   services = {
-     xserver.enable = true;
-     xserver.videoDrivers = ["modesetting" "nvidia"];
-     xserver.displayManager.gdm.enable = true;
-     flatpak.enable = true;
-     udisks2.enable = true;
+    xserver.enable = true;
+    xserver.videoDrivers = [
+      "modesetting"
+      "nvidia"
+    ];
+    xserver.displayManager.gdm.enable = true;
+    flatpak.enable = true;
+    udisks2.enable = true;
   };
 
   hardware = {
-     graphics.enable = true;
-     bluetooth.enable = true;
+    graphics.enable = true;
+    bluetooth.enable = true;
   };
 
   hardware.nvidia = {
@@ -159,8 +167,8 @@
 
     prime = {
       offload = {
-	enable = true;
-	enableOffloadCmd = true;
+        enable = true;
+        enableOffloadCmd = true;
       };
 
       intelBusId = "PCI:0:2:0";
@@ -168,12 +176,11 @@
     };
   };
 
-
   security.polkit.enable = true;
 
   nix.settings.experimental-features = [
-     "nix-command"
-     "flakes"
+    "nix-command"
+    "flakes"
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
