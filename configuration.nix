@@ -22,7 +22,18 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    plugins = with pkgs; [
+      networkmanager-fortisslvpn
+      networkmanager-iodine
+      networkmanager-l2tp
+      networkmanager-openconnect
+      networkmanager-openvpn
+      networkmanager-vpnc
+      networkmanager-sstp
+    ];
+  };
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -57,7 +68,7 @@
       "wheel"
     ];
     shell = pkgs.zsh;
-    packages = with pkgs; [ ];
+    packages = [ ];
   };
 
   # Allow unfree packages
@@ -91,14 +102,13 @@
     mako
     fuzzel
     rofi
-    networkmanager
-    networkmanagerapplet
     blueman
     pulsemixer
     nautilus
     udiskie
     mpv
     zathura
+    libreoffice
 
     # Niceties
     bat
@@ -113,6 +123,10 @@
     nil
     nixfmt
 
+    python313
+    python313Packages.virtualenv
+    python313Packages.pip
+
     # Niri-specific
     xwayland-satellite
   ];
@@ -122,6 +136,8 @@
     
     niri.enable = true;
     xwayland.enable = true;
+
+    nm-applet.enable = true;
     
     neovim = {
       enable = true;
