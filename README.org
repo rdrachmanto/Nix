@@ -1,0 +1,31 @@
+#+AUTHOR: Rakandhiya Rachmanto
+
+
+** My NixOS Desktop
+
+This is my NixOS desktop, to be used together with [[https://github.com/rdrachmanto/dotfiles][my dotfiles]], via stow
+
+** Reproducing
+
+1. Add these inside ~/etc/nixos/configuration.nix~ and rebuild
+   
+   #+BEGIN_SRC nix
+   environment.systemPackages = with pkgs; [
+     wget
+     curl
+     git
+   ];
+
+   nix.settings.experimental-features = [
+     "nix-command"
+     "flakes"
+   ];
+   #+END_SRC
+
+2. Clone this repository
+
+3. Run the flake command to rebuild the system
+
+   #+BEGIN_SRC bash
+   sudo nixos-rebuild switch --flake ~/Nix#thinkpad
+   #+END_SRC
