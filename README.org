@@ -5,6 +5,17 @@
 
 This is my NixOS desktop, to be used together with [[https://github.com/rdrachmanto/dotfiles][my dotfiles]], via stow
 
+[[./media/desktop.png]]
+
+
+** Notable packages
+
+- Niri
+- Fuzzel
+- Waybar
+- Emacs
+- Neovim
+
 ** Reproducing
 
 1. Add these inside ~/etc/nixos/configuration.nix~ and rebuild
@@ -25,7 +36,7 @@ This is my NixOS desktop, to be used together with [[https://github.com/rdrachma
 2. Clone this repository
 
 3. Run the flake command to rebuild the system
-     
+   
    #+BEGIN_SRC bash
    sudo nixos-rebuild switch --flake ~/Nix#thinkpad
    #+END_SRC
