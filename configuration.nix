@@ -56,6 +56,7 @@
       "networkmanager"
       "wheel"
     ];
+    shell = pkgs.zsh;
     packages = with pkgs; [ ];
   };
 
@@ -79,6 +80,7 @@
     polkit
     stow
     lshw
+    unzip
 
     # Desktop
     firefox
@@ -99,14 +101,12 @@
     zathura
 
     # Niceties
-    starship
     bat
     btop
     fastfetch
 
     # Editors
     emacs
-    neovim
 
     # Programming languages
     rustup
@@ -114,14 +114,40 @@
     nixfmt
 
     # Niri-specific
-    xwayland
     xwayland-satellite
   ];
 
   programs = {
     nix-ld.enable = true;
+    
     niri.enable = true;
     xwayland.enable = true;
+    
+    neovim = {
+      enable = true;
+      vimAlias = true;
+      viAlias = true;
+    };
+
+    starship = {
+      enable = true;
+      interactiveOnly = true;
+    };
+    zsh = {
+      enable = true;
+      autosuggestions.enable = true;
+      enableCompletion = true;
+      enableLsColors = true;
+    };
+    
+    git = {
+      enable = true;
+      config = {
+        init = {
+          defaultBranch = "main";
+        };
+      };
+    };
   };
 
   fonts = {
