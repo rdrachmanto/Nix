@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -119,6 +119,9 @@
     emacs
 
     # Programming languages
+    gnumake
+    gcc
+    
     rustup
     nil
     nixfmt
@@ -143,6 +146,7 @@
       enable = true;
       vimAlias = true;
       viAlias = true;
+      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     };
 
     starship = {
