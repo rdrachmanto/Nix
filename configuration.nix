@@ -104,19 +104,28 @@
     rofi
     blueman
     pulsemixer
+    
     nautilus
+    
     udiskie
     mpv
     zathura
     libreoffice
+    networkmanagerapplet
+    swayimg
+    pwvucontrol
 
+    # Trying out some packages/desktop apps!
+    qutebrowser
+
+    
     # Niceties
     bat
     btop
     fastfetch
 
     # Editors
-    emacs
+    emacs-pgtk
 
     # Programming languages
     gnumake
@@ -129,7 +138,13 @@
     python313
     python313Packages.virtualenv
     python313Packages.pip
+    basedpyright
 
+    bash-language-server
+    
+    # Dev Niceties
+    zeal
+    
     # Niri-specific
     xwayland-satellite
   ];
@@ -140,8 +155,6 @@
     niri.enable = true;
     xwayland.enable = true;
 
-    nm-applet.enable = true;
-    
     neovim = {
       enable = true;
       vimAlias = true;
@@ -195,32 +208,45 @@
     xserver.displayManager.gdm.enable = true;
     flatpak.enable = true;
     udisks2.enable = true;
+    gvfs.enable = true;
   };
 
   hardware = {
     graphics.enable = true;
     bluetooth.enable = true;
-  };
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = false;
+      powerManagement.finegrained = false;
+      open = true;
+      nvidiaSettings = true;
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true;
-    nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
 
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+      prime = {
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
 
-    prime = {
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
       };
-
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
     };
   };
+
+  environment.variables = {
+    GSK_RENDER = "ngl";
+    GSK_RENDERER = "ngl";
+  };
+  
+  environment.etc."xdg-desktop-portal/niri-portals.conf".text = ''
+    [preferred]
+    org.freedesktop.impl.portal.FileChooser=gtk;
+    org.freedesktop.impl.portal.Access=gtk;
+    org.freedesktop.impl.portal.Notification=gtk;
+    org.freedesktop.impl.portal.Secret=gnome-keyring;
+  '';  
 
   security.polkit.enable = true;
 
@@ -255,5 +281,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
-
 }
