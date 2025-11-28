@@ -6,13 +6,19 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: {
-    nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, ... }@inputs:
+    let
       system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./configuration.nix
-      ];
+      pkgsForPackages = nixpkgs.legacyPackages.${system};
+    in {
+      packages.${system}."janet-lsp" = pkgsForPackages.callPackage ./wrappers/janet-lsp.nix { };
+      
+      nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs self; };
+        modules = [
+          ./configuration.nix
+        ];
+      };
     };
-  };
 }

@@ -2,9 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, self, ... }:
 
-{
+let
+  system = "x86_64-linux";
+  janetLsp = self.packages.${system}."janet-lsp";
+in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -73,6 +76,7 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.input-fonts.acceptLicense = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -92,6 +96,7 @@
     stow
     lshw
     unzip
+    gzip
 
     # Desktop
     firefox
@@ -105,7 +110,9 @@
     blueman
     pulsemixer
     
-    nautilus
+    # nautilus
+    nemo
+    nemo-fileroller
     
     udiskie
     mpv
@@ -116,8 +123,7 @@
     pwvucontrol
 
     # Trying out some packages/desktop apps!
-    qutebrowser
-
+    
     
     # Niceties
     bat
@@ -138,9 +144,14 @@
     python313
     python313Packages.virtualenv
     python313Packages.pip
+    python313Packages.ruff
     basedpyright
 
     bash-language-server
+
+    janet
+    jpm
+    janetLsp
     
     # Dev Niceties
     zeal
@@ -187,8 +198,8 @@
     fontconfig.enable = true;
     packages = with pkgs; [
       nerd-fonts.zed-mono
-      nerd-fonts.iosevka-term
-      nerd-fonts.jetbrains-mono
+      input-fonts
+      maple-mono.NF
     ];
   };
 
