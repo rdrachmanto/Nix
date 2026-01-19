@@ -69,6 +69,7 @@ in {
     extraGroups = [
       "networkmanager"
       "wheel"
+      "dialout"
     ];
     shell = pkgs.zsh;
     packages = [ ];
@@ -80,6 +81,7 @@ in {
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  environment.localBinInPath = true;
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
@@ -107,14 +109,12 @@ in {
     mako
     fuzzel
     rofi
-    blueman
     pulsemixer
-    
-    # nautilus
-    nemo
-    nemo-fileroller
-    
+
+    # File manager
+    nautilus
     udiskie
+    
     mpv
     zathura
     libreoffice
@@ -123,7 +123,7 @@ in {
     pwvucontrol
 
     # Trying out some packages/desktop apps!
-    
+    cmatrix
     
     # Niceties
     bat
@@ -132,14 +132,24 @@ in {
 
     # Editors
     emacs-pgtk
+    lem-webview
+    zed-editor
+
+    # academia
+    zotero
+    typst
+    tinymist
+    texlive.combined.scheme-medium
 
     # Programming languages
     gnumake
     gcc
     
-    rustup
     nil
     nixfmt
+
+    vscode-langservers-extracted
+    emmet-language-server
 
     python313
     python313Packages.virtualenv
@@ -149,9 +159,8 @@ in {
 
     bash-language-server
 
-    janet
-    jpm
-    janetLsp
+    arduino-cli
+    R  # Don't forget to do `install.packages("languageserver")` in the R console
     
     # Dev Niceties
     zeal
@@ -170,7 +179,6 @@ in {
       enable = true;
       vimAlias = true;
       viAlias = true;
-      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     };
 
     starship = {
@@ -192,6 +200,24 @@ in {
         };
       };
     };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    java = {
+      enable = true;
+      package = pkgs.jdk17;
+    };
+
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+      extraCompatPackages = with pkgs; [ proton-ge-bin ];
+      extraPackages = with pkgs; [ gamescope ];
+    };
   };
 
   fonts = {
@@ -200,13 +226,14 @@ in {
       nerd-fonts.zed-mono
       input-fonts
       maple-mono.NF
+      nerd-fonts.iosevka
     ];
   };
 
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
     ];
   };
 
@@ -220,6 +247,7 @@ in {
     flatpak.enable = true;
     udisks2.enable = true;
     gvfs.enable = true;
+    blueman.enable = true;
   };
 
   hardware = {
@@ -253,9 +281,9 @@ in {
   
   environment.etc."xdg-desktop-portal/niri-portals.conf".text = ''
     [preferred]
-    org.freedesktop.impl.portal.FileChooser=gtk;
-    org.freedesktop.impl.portal.Access=gtk;
-    org.freedesktop.impl.portal.Notification=gtk;
+    # org.freedesktop.impl.portal.FileChooser=gtk;
+    # org.freedesktop.impl.portal.Access=gtk;
+    # org.freedesktop.impl.portal.Notification=gtk;
     org.freedesktop.impl.portal.Secret=gnome-keyring;
   '';  
 
@@ -284,6 +312,10 @@ in {
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  networking.extraHosts = ''
+    172.20.148.125 rd-srv-atlas.lab
+  '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

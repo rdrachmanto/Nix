@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    lem.url = "github:lem-project/lem";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -17,6 +17,7 @@
         inherit system;
         specialArgs = { inherit inputs self; };
         modules = [
+          { nixpkgs.overlays = [ inputs.lem.overlays.default ]; }
           ./configuration.nix
         ];
       };
