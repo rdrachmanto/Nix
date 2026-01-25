@@ -104,12 +104,7 @@ in {
     firefox
     alacritty
     swww
-    swaylock
-    waybar
-    mako
-    fuzzel
     rofi
-    pulsemixer
 
     # File manager
     nautilus
@@ -117,10 +112,8 @@ in {
     
     mpv
     zathura
-    libreoffice
-    networkmanagerapplet
+    onlyoffice-desktopeditors
     swayimg
-    pwvucontrol
 
     # Trying out some packages/desktop apps!
     cmatrix
@@ -132,7 +125,6 @@ in {
 
     # Editors
     emacs-pgtk
-    lem-webview
     zed-editor
 
     # academia
@@ -174,6 +166,23 @@ in {
     
     niri.enable = true;
     xwayland.enable = true;
+
+    dms-shell = {
+      enable = true;
+      quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+      
+      systemd = {
+        enable = true;
+        restartIfChanged = true;
+      };
+
+      enableSystemMonitoring = true;
+      enableClipboard = true;
+      enableVPN = true;
+      enableAudioWavelength = true;
+      enableCalendarEvents = true;
+      enableDynamicTheming = true;
+    };
 
     neovim = {
       enable = true;
@@ -247,7 +256,6 @@ in {
     flatpak.enable = true;
     udisks2.enable = true;
     gvfs.enable = true;
-    blueman.enable = true;
   };
 
   hardware = {
@@ -274,6 +282,9 @@ in {
     };
   };
 
+  # Power management
+  powerManagement.enable = true;
+
   environment.variables = {
     GSK_RENDER = "ngl";
     GSK_RENDERER = "ngl";
@@ -281,9 +292,9 @@ in {
   
   environment.etc."xdg-desktop-portal/niri-portals.conf".text = ''
     [preferred]
-    # org.freedesktop.impl.portal.FileChooser=gtk;
-    # org.freedesktop.impl.portal.Access=gtk;
-    # org.freedesktop.impl.portal.Notification=gtk;
+    org.freedesktop.impl.portal.FileChooser=gnome;
+    org.freedesktop.impl.portal.Access=gnome;
+    org.freedesktop.impl.portal.Notification=gnome;
     org.freedesktop.impl.portal.Secret=gnome-keyring;
   '';  
 
