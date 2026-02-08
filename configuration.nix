@@ -83,8 +83,6 @@ in {
   # $ nix search wget
   environment.localBinInPath = true;
   environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #  wget
     wget
     curl
     git
@@ -99,28 +97,27 @@ in {
     lshw
     unzip
     gzip
+    busybox
 
     # Desktop
     firefox
     alacritty
-    swww
-    rofi
-
-    # File manager
+    vicinae
     nautilus
     udiskie
-    
     mpv
     zathura
     onlyoffice-desktopeditors
     swayimg
 
+    # Virtualization
+    distrobox
+    
     # Trying out some packages/desktop apps!
-    cmatrix
     
     # Niceties
     bat
-    btop
+    htop
     fastfetch
 
     # Editors
@@ -131,7 +128,15 @@ in {
     zotero
     typst
     tinymist
+
+    (pkgs.texlive.combine {
+      inherit (pkgs.texlive) scheme-medium
+        wrapfig capt-of;
+      # Add other packages here
+    })
+    
     texlive.combined.scheme-medium
+    texlivePackages.wrapfig2
 
     # Programming languages
     gnumake
@@ -143,6 +148,7 @@ in {
     vscode-langservers-extracted
     emmet-language-server
 
+    micromamba
     python313
     python313Packages.virtualenv
     python313Packages.pip
@@ -233,8 +239,6 @@ in {
     fontconfig.enable = true;
     packages = with pkgs; [
       nerd-fonts.zed-mono
-      input-fonts
-      maple-mono.NF
       nerd-fonts.iosevka
     ];
   };
@@ -256,6 +260,16 @@ in {
     flatpak.enable = true;
     udisks2.enable = true;
     gvfs.enable = true;
+    upower = {
+      enable = true;
+    };
+
+    tailscale.enable = true;
+  };
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
   };
 
   hardware = {
@@ -275,6 +289,7 @@ in {
           enable = true;
           enableOffloadCmd = true;
         };
+        # sync.enable = true;
 
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
@@ -325,7 +340,6 @@ in {
   # networking.firewall.enable = false;
 
   networking.extraHosts = ''
-    172.20.148.125 rd-srv-atlas.lab
   '';
 
   # This value determines the NixOS release from which the default
