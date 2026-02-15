@@ -18,7 +18,7 @@
         specialArgs = { inherit inputs self; };
         modules = [
           # ./configuration.nix
-          ./hosts/thinkpad.nix
+          ./hosts/thinkpad/thinkpad.nix
         ];
       };
     };
