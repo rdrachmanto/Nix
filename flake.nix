@@ -23,6 +23,7 @@
       };
       nixosConfigurations.batavia = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           ./hosts/batavia/batavia.nix
           inputs.agenix.nixosModules.default
@@ -30,6 +31,7 @@
       };
       nixosConfigurations.alexandria = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
           ./hosts/alexandria/alexandria.nix
         ];

@@ -11,13 +11,24 @@
   # Set device hostname
   networking.hostName = "rd-batavia";
 
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    inputs.agenix.packages."${system}".default
+  ];
 
   programs.zsh.enable = true;
 
   # Enable ssh into machine
   services.openssh.enable = true;
 
+  age.secrets = {
+    caddy = {
+      file = ../../secrets/caddy.age;
+      path = "/etc/caddy/Caddyfile";
+      owner = "caddy";
+      group = "caddy";
+      mode = "600";
+    };
+  };
   services.caddy = {
     enable = true;
     package = pkgs.caddy.withPlugins {
@@ -45,7 +56,9 @@
       reverse_proxy http://127.0.0.1:7070
     '';
   };
-  systemd.services.caddy.serviceConfig.EnvironmentFile = ["/etc/caddy/envfile"];
+  systemd.services.caddy.serviceConfig.EnvironmentFile = [
+    config.age.secrets.caddy.path
+  ];
 
   services.dnsmasq = {
     enable = true;
@@ -54,7 +67,7 @@
       bind-dynamic = true;
 
       local = "/lab.rdrachmanto.dev/";
-      address = "/lab.rdrachmanto.dev/100.125.252.49";
+      address = "/lab.rdrachmanto.dev/100.109.117.96";
 
       domain-needed = true;
       bogus-priv = true;
@@ -64,7 +77,7 @@
   services.glances.enable = true;
   services.yarr.enable = true;
 
-  networking.firewall.allowedTCPPorts = [];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   system.stateVersion = "25.11";
