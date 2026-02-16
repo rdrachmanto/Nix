@@ -15,10 +15,24 @@
     in {
       nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs self; };
+        specialArgs = { inherit inputs; };
         modules = [
           # ./configuration.nix
           ./hosts/thinkpad/thinkpad.nix
+        ];
+      };
+      nixosConfigurations.batavia = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          # ./configuration.nix
+          ./hosts/batavia/batavia.nix
+        ];
+      };
+      nixosConfigurations.alexandria = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          # ./configuration.nix
+          ./hosts/alexandria/alexandria.nix
         ];
       };
     };
