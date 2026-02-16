@@ -2,7 +2,7 @@
 {
   imports = [
     ../../base.nix
-    # ./hardware-configuration.nix
+    ./hardware-configuration.nix
   ];
 
   # Set timezone
@@ -13,6 +13,8 @@
 
   environment.systemPackages = with pkgs; [];
 
+  programs.zsh.enable = true;
+
   # Enable ssh into machine
   services.openssh.enable = true;
 
@@ -20,7 +22,7 @@
     enable = true;
     package = pkgs.caddy.withPlugins {
       plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
-      hash = "sha256-R1ZqQ8drcBQIH7cLq9kEvdg9Ze3bKkT8IAFavldVeC0=";
+      hash = "sha256-aVSE8y9Bt+XS7+M27Ua+ewxRIcX51PuFu4+mqKbWFwo=";
     }; 
     globalConfig = ''    
       auto_https prefer_wildcard

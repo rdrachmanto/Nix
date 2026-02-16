@@ -68,5 +68,5 @@
   # (1) tailscale
   services.tailscale.enable = true;
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
