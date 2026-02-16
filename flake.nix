@@ -7,6 +7,7 @@
       url = "git+https://git.outfoxxed.me/quickshell/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix.url = "github:ryantm/agenix";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -17,21 +18,19 @@
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
-          # ./configuration.nix
           ./hosts/thinkpad/thinkpad.nix
         ];
       };
       nixosConfigurations.batavia = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          # ./configuration.nix
           ./hosts/batavia/batavia.nix
+          inputs.agenix.nixosModules.default
         ];
       };
       nixosConfigurations.alexandria = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          # ./configuration.nix
           ./hosts/alexandria/alexandria.nix
         ];
       };
