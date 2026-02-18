@@ -28,6 +28,10 @@
       group = "caddy";
       mode = "600";
     };
+    miniflux = {
+      file = ../../secrets/miniflux.age;
+      path = "/etc/nixos/miniflux-admin-credentials";
+    };
   };
   services.caddy = {
     enable = true;
@@ -49,11 +53,14 @@
     virtualHosts."lab.rdrachmanto.dev".extraConfig = ''
       respond "Hello from caddy!"
     '';
-    virtualHosts."glances.lab.rdrachmanto.dev".extraConfig = ''
+    virtualHosts."status.lab.rdrachmanto.dev".extraConfig = ''
+      reverse_proxy http://127.0.0.1:3230
+    '';
+    virtualHosts."monitor.lab.rdrachmanto.dev".extraConfig = ''
       reverse_proxy http://127.0.0.1:61208
     '';
     virtualHosts."rss.lab.rdrachmanto.dev".extraConfig = ''
-      reverse_proxy http://127.0.0.1:7070
+      reverse_proxy http://127.0.0.1:3001
     '';
   };
   systemd.services.caddy.serviceConfig.EnvironmentFile = [
@@ -74,8 +81,44 @@
     };
   };
 
-  services.glances.enable = true;
-  services.yarr.enable = true;
+  services.gatus = {
+    enable = true;
+    settings = {
+      web.port = 3230;
+      endpoints = [
+        {
+          name = "Portfolio Website";
+	  group = "Core";
+	  url = "https://rdrachmanto.github.io";
+	  interval = "5m";
+	  conditions = [
+	    "[STATUS] == 200"
+	  ];
+        }
+        {
+          name = "RSS Reader";
+	  group = "Core";
+	  url = "https://rss.lab.rdrachmanto.dev";
+	  interval = "5m";
+	  conditions = [
+	    "[STATUS] == 200"
+	  ];
+        }
+      ];
+    };
+  };
+
+  services.glances = {
+    enable = true;
+  };
+
+  services.miniflux = {
+    enable = true;
+    adminCredentialsFile = config.age.secrets.miniflux.path; 
+    config = {
+      LISTEN_ADDR = "localhost:3001";
+    };
+  };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
