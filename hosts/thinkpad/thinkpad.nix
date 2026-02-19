@@ -114,7 +114,7 @@
       };
 
       enableSystemMonitoring = true;
-      enableClipboard = true;
+      # enableClipboard = true;
       enableVPN = true;
       enableAudioWavelength = true;
       enableCalendarEvents = true;
@@ -194,6 +194,7 @@
     upower = {
       enable = true;
     };
+    openssh.enable = true;
   };
 
   virtualisation.podman = {
