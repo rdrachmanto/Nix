@@ -1,5 +1,8 @@
 { config, pkgs, inputs, ... }:
 {
+  nix.settings.extra-trusted-substituters = "https://cache.nixos-cuda.org";
+  nix.settings.extra-trusted-public-keys = "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=";
+
   imports = [
     ../../base.nix
     ./hardware-configuration.nix
@@ -19,6 +22,7 @@
     fzf
     fd
     ripgrep
+
     cliphist
     nmap
     polkit
@@ -29,11 +33,19 @@
     busybox
     dig
 
-    # Desktop
-    firefox
-    qutebrowser
-    alacritty
+    # WM-specific settings
+    # bar, notifications, OSD, launcher, etc.
+    awww
+    waybar
+    swaylock
+    swaynotificationcenter
+    pwvucontrol
     vicinae
+
+    # Desktop
+    via                         # keyboard configurator
+    firefox
+    alacritty
     nautilus
     udiskie
     mpv
@@ -43,22 +55,19 @@
 
     # Virtualization
     distrobox
-    
+
     # Trying out some packages/desktop apps!
     
     # Niceties
-    bat
     htop
     fastfetch
 
     # Editors
-    emacs-pgtk
-    zed-editor
-
+    
+    
     # academia
+    drawio
     zotero
-    typst
-    tinymist
 
     (pkgs.texlive.combine {
       inherit (pkgs.texlive) scheme-medium
@@ -88,11 +97,13 @@
 
     bash-language-server
 
-    arduino-cli
-    R  # Don't forget to do `install.packages("languageserver")` in the R console
+    janet
+    jpm
+
+    # arduino-cli
+    # R  # Don't forget to do `install.packages("languageserver")` in the R console
     
     # Dev Niceties
-    zeal
     
     # Niri-specific
     xwayland-satellite
@@ -104,21 +115,26 @@
     niri.enable = true;
     xwayland.enable = true;
 
-    dms-shell = {
-      enable = true;
-      quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+    # dms-shell = {
+    #   enable = true;
+    #   quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
       
-      systemd = {
-        enable = true;
-        restartIfChanged = true;
-      };
+    #   systemd = {
+    #     enable = true;
+    #     restartIfChanged = true;
+    #   };
 
-      enableSystemMonitoring = true;
-      # enableClipboard = true;
-      enableVPN = true;
-      enableAudioWavelength = true;
-      enableCalendarEvents = true;
-      enableDynamicTheming = true;
+    #   enableSystemMonitoring = true;
+    #   # enableClipboard = true;
+    #   enableVPN = true;
+    #   enableAudioWavelength = true;
+    #   enableCalendarEvents = true;
+    #   enableDynamicTheming = true;
+    # };
+
+    nm-applet = {
+      enable = true;
+      indicator = true;
     };
 
     neovim = {
@@ -182,12 +198,12 @@
   };
 
   services = {
-    xserver.enable = true;
+    # xserver.enable = true;
     xserver.videoDrivers = [
       "modesetting"
       "nvidia"
     ];
-    xserver.displayManager.gdm.enable = true;
+    displayManager.gdm.enable = false;
     flatpak.enable = true;
     udisks2.enable = true;
     gvfs.enable = true;
@@ -195,6 +211,18 @@
       enable = true;
     };
     openssh.enable = true;
+    fwupd.enable = true;
+    emacs = {
+      enable = true;
+      defaultEditor = true;
+      startWithGraphical = true;
+      package = pkgs.emacs-pgtk;
+    };
+
+    blueman = {
+      enable = true;
+    };
+    
   };
 
   virtualisation.podman = {
