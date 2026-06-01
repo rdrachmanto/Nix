@@ -95,29 +95,12 @@
 	    "[STATUS] == 200"
 	  ];
         }
-        {
-          name = "RSS Reader";
-	  group = "Core";
-	  url = "https://rss.lab.rdrachmanto.dev";
-	  interval = "5m";
-	  conditions = [
-	    "[STATUS] == 200"
-	  ];
-        }
       ];
     };
   };
 
   services.glances = {
     enable = true;
-  };
-
-  services.miniflux = {
-    enable = true;
-    adminCredentialsFile = config.age.secrets.miniflux.path; 
-    config = {
-      LISTEN_ADDR = "localhost:3001";
-    };
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
