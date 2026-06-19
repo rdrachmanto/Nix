@@ -32,6 +32,7 @@
     gzip
     busybox
     dig
+    pciutils
 
     # WM-specific settings
     # bar, notifications, OSD, launcher, etc.
@@ -48,19 +49,21 @@
     alacritty
     nautilus
     udiskie
-    mpv
+    celluloid
     zathura
     onlyoffice-desktopeditors
+    libreoffice
     swayimg
+    gapless
 
     # Virtualization
     distrobox
+    rpi-imager
 
     # Trying out some packages/desktop apps!
     
     # Niceties
     htop
-    fastfetch
 
     # Editors
     
@@ -143,10 +146,6 @@
       viAlias = true;
     };
 
-    starship = {
-      enable = true;
-      interactiveOnly = true;
-    };
     zsh = {
       enable = true;
       autosuggestions.enable = true;
@@ -185,7 +184,6 @@
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
-      nerd-fonts.zed-mono
       nerd-fonts.iosevka
     ];
   };
@@ -203,7 +201,7 @@
       "modesetting"
       "nvidia"
     ];
-    displayManager.gdm.enable = false;
+    displayManager.gdm.enable = true;
     flatpak.enable = true;
     udisks2.enable = true;
     gvfs.enable = true;
@@ -222,7 +220,18 @@
     blueman = {
       enable = true;
     };
-    
+
+    auto-cpufreq = {
+      enable = true;
+      settings.battery = {
+        governor = "powersave";
+        turbo = "never";
+      };
+      settings.charger = {
+        governor = "performance";
+        turbo = "auto";
+      };
+    };
   };
 
   virtualisation.podman = {
