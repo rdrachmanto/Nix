@@ -15,6 +15,11 @@
     inputs.agenix.packages."${system}".default
   ];
 
+  # User groups
+  users.groups.git = {};
+  users.users.rdrachmanto.extraGroups = [ "git" ];
+  users.users.legit.extraGroups = [ "git" ];
+
   programs.zsh.enable = true;
 
   # Enable ssh into machine
@@ -28,20 +33,15 @@
       group = "caddy";
       mode = "600";
     };
-    miniflux = {
-      file = ../../secrets/miniflux.age;
-      path = "/etc/nixos/miniflux-admin-credentials";
-    };
   };
+
   services.caddy = {
     enable = true;
     package = pkgs.caddy.withPlugins {
       plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
-      hash = "sha256-aVSE8y9Bt+XS7+M27Ua+ewxRIcX51PuFu4+mqKbWFwo=";
+      hash = "sha256-MlKX2obWac+jP4j9UHFMxsY/DRaqw9JCVAdI7erhFwo=";
     }; 
     globalConfig = ''    
-      auto_https prefer_wildcard
-
       cert_issuer acme {
         dns porkbun {
           api_key {env.PORKBUN_API_KEY}
@@ -51,7 +51,8 @@
       }
     '';
     virtualHosts."lab.rdrachmanto.dev".extraConfig = ''
-      respond "Hello from caddy!"
+      root * /mnt/www/planet
+      file_server
     '';
     virtualHosts."status.lab.rdrachmanto.dev".extraConfig = ''
       reverse_proxy http://127.0.0.1:3230
@@ -59,8 +60,11 @@
     virtualHosts."monitor.lab.rdrachmanto.dev".extraConfig = ''
       reverse_proxy http://127.0.0.1:61208
     '';
-    virtualHosts."rss.lab.rdrachmanto.dev".extraConfig = ''
-      reverse_proxy http://127.0.0.1:3001
+    virtualHosts."music.lab.rdrachmanto.dev".extraConfig = ''
+      reverse_proxy http://127.0.0.1:4533
+    '';
+    virtualHosts."git.lab.rdrachmanto.dev".extraConfig = ''
+      reverse_proxy http://127.0.0.1:5555
     '';
   };
   systemd.services.caddy.serviceConfig.EnvironmentFile = [
@@ -103,7 +107,38 @@
     enable = true;
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.legit = {
+    enable = true;
+    user = "legit";
+    group = "legit";
+    settings = {
+      dirs = {
+        static = "${./legit/static}";
+        templates = "${./legit/templates}";
+      };
+      server = {
+        port = 5555;
+        name = "git.lab.rdrachmanto.dev";
+      };
+      repo = {
+        readme = [ "README.md" "README.org" "README" "README.txt" "readme" ];
+        scanPath = "/mnt/repos/";
+      };
+    };
+  };
+
+  services.navidrome = {
+    enable = true;
+    settings = {
+      Address = "0.0.0.0";
+      Port = 4533;
+      MusicFolder = "/mnt/music";
+      BaseUrl = "https://music.lab.rdrachmanto.dev";
+    };
+    openFirewall = true;
+  };
+
+  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   system.stateVersion = "25.11";
