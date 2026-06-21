@@ -11,42 +11,55 @@
       {{ $ref := .ref }}
       {{ $parent := .parent }}
 
-      <div class="tree">
-	<div class="log-col-title">Mode</div>
-	<div style="text-align: right;" class="log-col-title">Size</div>
-	<div class="log-col-title">Name</div>
-        {{ if $parent }}
-        <div></div>
-        <div></div>
-        <div><a href="/{{ $repo }}/tree/{{ $ref }}/{{ .dotdot }}">..</a></div>
-        {{ end }}
-        {{ range .files }}
-        {{ if not .IsFile }}
-        <div class="mode">{{ .Mode }}</div>
-        <div class="size">{{ .Size }}</div>
-        <div>
-          {{ if $parent }}
-          <a href="/{{ $repo }}/tree/{{ $ref }}/{{ $parent }}/{{ .Name }}">{{ .Name }}/</a>
-          {{ else }}
-          <a href="/{{ $repo }}/tree/{{ $ref }}/{{ .Name }}">{{ .Name }}/</a>
-          {{ end }}
-        </div>
-        {{ end }}
-        {{ end }}
-        {{ range .files }}
-        {{ if .IsFile }}
-        <div class="mode">{{ .Mode }}</div>
-        <div class="size">{{ .Size }}</div>
-        <div>
-          {{ if $parent }}
-          <a href="/{{ $repo }}/blob/{{ $ref }}/{{ $parent }}/{{ .Name }}">{{ .Name }}</a>
-          {{ else }}
-          <a href="/{{ $repo }}/blob/{{ $ref }}/{{ .Name }}">{{ .Name }}</a>
-          {{ end }}
-        </div>
-        {{ end }}
-        {{ end }}
-      </div>
+      <table>
+	<thead>
+	  <tr>
+	    <th>Mode</th>
+	    <th>Size</th>
+	    <th>Name</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {{ if $parent }}
+	  <tr>
+	    <td></td>
+	    <td></td>
+	    <td><a href="/{{ $repo }}/tree/{{ $ref }}/{{ .dotdot }}">..</a></td>
+	  </tr>
+	  {{ end }}
+	  {{ range .files }}
+	  <tr>
+	    {{ if not .IsFile }}
+	    <td class="ls-mode">{{ .Mode  }}</td>
+	    <td class="ls-mode">{{ .Size  }}</td>
+	    <td>
+	      {{ if $parent }}
+	      <a href="/{{ $repo }}/tree/{{ $ref }}/{{ $parent }}/{{ .Name }}">{{ .Name }}/</a>
+	      {{ else }}
+	      <a href="/{{ $repo }}/tree/{{ $ref }}/{{ .Name }}">{{ .Name }}/</a>
+	      {{ end }}
+	    </td>
+	    {{ end }}
+	  </tr>
+	  {{ end }}
+	  {{ range .files  }}
+	  <tr>
+	    {{ if .IsFile }}
+	    <td class="ls-mode">{{ .Mode  }}</td>
+	    <td class="ls-mode">{{ .Size  }}</td>
+	    <td>
+	      {{ if $parent }}
+	      <a href="/{{ $repo }}/blob/{{ $ref }}/{{ $parent }}/{{ .Name }}">{{ .Name }}</a>
+	      {{ else }}
+	      <a href="/{{ $repo }}/blob/{{ $ref }}/{{ .Name }}">{{ .Name }}</a>
+	      {{ end }}
+	    </td>
+	    {{ end }}
+	  </tr>
+	  {{ end }}
+	<tbody>
+      </table>
+
       <article>
         <pre>
           {{- if .readme }}{{ .readme }}{{- end -}}

@@ -9,14 +9,24 @@
   <body>
     <main>
       <div class="index">
-       <div class="log-col-title">Repo</div>
-       <div class="log-col-title">Description</div>
-       <div class="log-col-title">Age</div>
-      {{ range .info }}
-       <div class="index-name"><a href="/{{ .Name }}">{{ .DisplayName }}</a></div>
-       <div class="desc">{{ .Desc }}</div>
-       <div>{{ .Idle }}</div>
-      {{ end }}
+        <table>
+          <thead>
+	    <tr>
+	      <th>Repo</th>
+	      <th>Description</th>
+	      <th>Age</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {{ range .info }}
+	    <tr>
+	      <td><a href="/{{ .Name }}">{{ .DisplayName  }}</a></td>
+	      <td>{{ .Desc  }}</td>
+	      <td>{{ .Idle  }}</td>
+	    </tr>
+	    {{ end }}
+	  <tbody>
+	</table>
       </div>
     </main>
   </body>

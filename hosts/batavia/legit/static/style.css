@@ -51,9 +51,9 @@ pre {
 }
 
 body {
-  max-width: 90%;
-  padding: 0 13px;
+  width: 80%;
   margin: 40px auto;
+  padding: 0 13px;
 }
 
 main, footer {
@@ -121,10 +121,6 @@ a:hover {
 
 .index {
   padding-top: 2em;
-  display: grid;
-  grid-template-columns: 20em 1fr minmax(0, 7em);
-  grid-row-gap: 0.5em;
-  min-width: 0;
 }
 
 .clone-url {
@@ -152,7 +148,7 @@ a:hover {
 
 .log {
   display: grid;
-  grid-template-columns: 10rem auto 30rem 30rem;
+  grid-template-columns: auto 10rem 10rem;
   grid-row-gap: 0.8em;
   grid-column-gap: 8rem;
   margin-bottom: 2em;
@@ -164,9 +160,27 @@ a:hover {
   white-space: pre-wrap;
 }
 
+table {
+  width: 100%;
+}
+
+table thead {
+  font-weight: bold;
+  color: #f4a259; 
+  text-align: left;
+}
+
+th, td {
+  padding: 6px;
+}
+
 .log-col-title {
   font-weight: bold;
   color: #f4a259; 
+}
+
+.ls-mode {
+  width: 10em;
 }
 
 .mode, .size {
@@ -182,6 +196,7 @@ a:hover {
 }
 
 .readme {
+  margin-top: 2em;
   background: var(--light-gray);
   padding: 0.5rem;
 }
@@ -210,6 +225,11 @@ a:hover {
 
 .commit-hash, .commit-email {
   font-family: var(--mono-font);
+  display: inline-block;
+  max-width: 50ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .commit-email:before {

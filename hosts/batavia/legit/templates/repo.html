@@ -8,18 +8,25 @@
     {{ template "nav" . }}
     <main>
       {{ $repo := .name }}
-      <div class="log">
-	<div class="log-col-title">Commit</div>
-	<div class="log-col-title">Message</div>
-	<div class="log-col-title">Author</div>
-	<div class="log-col-title">Age</div>
-        {{ range .commits }}
-	<div><a href="/{{ $repo }}/commit/{{ .Hash.String }}" class="commit-hash">{{ slice .Hash.String 0 8 }}</a></div>
-	<pre>{{ .Message }}</pre>
-	<div>{{ .Author.Name }}</div>
-	<div>{{ .Author.When.Format "02 Jan 2006" }}</div>
-        {{ end }}
-      </div>
+
+      <table>
+	<thead>
+	  <tr>
+	    <th>Age</th>
+	    <th>Commit Message</th>
+	    <th>Author</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {{ range .commits }}
+	  <tr>
+	    <td>{{ .Author.When.Format "02 Jan 2006"  }}</td>
+	    <td><a href="/{{ $repo }}/commit/{{ .Hash.String }}" class="commit-hash">{{ .Message }}</a></td>
+	    <td>{{ .Author.Name  }}</td>
+	  </tr>
+	  {{ end }}
+	<tbody>
+      </table>
 {{- if .readme }}
       <article class="readme">
         {{- .readme -}}
