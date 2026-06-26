@@ -20,7 +20,6 @@
   users.groups.git = {};
   users.groups.podman = {};
   users.users.rdrachmanto.extraGroups = [ "git" "podman" ];
-  users.users.legit.extraGroups = [ "git" ];
 
   programs.zsh.enable = true;
 
@@ -66,7 +65,7 @@
       reverse_proxy http://127.0.0.1:4533
     '';
     virtualHosts."git.lab.rdrachmanto.dev".extraConfig = ''
-      reverse_proxy http://127.0.0.1:5555
+      reverse_proxy http://127.0.0.1:3333
     '';
   };
   systemd.services.caddy.serviceConfig.EnvironmentFile = [
@@ -87,59 +86,6 @@
     };
   };
 
-  # services.gatus = {
-  #   enable = true;
-  #   settings = {
-  #     web.port = 3230;
-  #     endpoints = [
-  #       {
-  #         name = "Portfolio Website";
-  #         group = "Core";
-  #         url = "https://rdrachmanto.github.io";
-  #         interval = "5m";
-  #         conditions = [
-  #           "[STATUS] == 200"
-  #         ];
-  #       }
-  #     ];
-  #   };
-  # };
-
-  # services.glances = {
-  #   enable = true;
-  # };
-
-  services.legit = {
-    enable = true;
-    user = "legit";
-    group = "legit";
-    settings = {
-      dirs = {
-        static = "${./legit/static}";
-        templates = "${./legit/templates}";
-      };
-      server = {
-        port = 5555;
-        name = "git.lab.rdrachmanto.dev";
-      };
-      repo = {
-        readme = [ "README.md" "README.org" "README" "README.txt" "readme" ];
-        scanPath = "/mnt/repos/";
-      };
-    };
-  };
-
-  services.navidrome = {
-    enable = true;
-    settings = {
-      Address = "0.0.0.0";
-      Port = 4533;
-      MusicFolder = "/mnt/music";
-      BaseUrl = "https://music.lab.rdrachmanto.dev";
-    };
-    openFirewall = true;
-  };
-  
   services.samba = {
     enable = true;
     securityType = "user";

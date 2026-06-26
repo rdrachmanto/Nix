@@ -3,6 +3,6 @@ services:
     image: twinproduction/gatus:latest
     container_name: gatus
     restart: unless-stopped
-    ports: ["8080:3230"]
+    ports: ["3230:8080"]
     volumes:
       - ./config.yaml:/config/config.yaml:ro

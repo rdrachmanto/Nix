@@ -1,10 +1,9 @@
 services:
-  gatus:
+  glances:
     image: nicolargo/glances:latest
     ports: ["61208:61208"]
     restart: unless-stopped
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /run/user/1000/podman/podman.sock:/run/user/1000/podman/podman.sock
+      - /run/user/1000/podman/podman.sock:/run/user/1000/podman/podman.sock:ro
     environment:
       - "GLANCES_OPT=-w"

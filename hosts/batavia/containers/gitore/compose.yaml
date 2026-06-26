@@ -1,0 +1,13 @@
+services:
+  gitore:
+    userns_mode: keep-id
+    image: codeberg.org/kallisti5/gitore:v0.3.0
+    container_name: gitore
+    restart: unless-stopped
+    ports: ["3333:8000"]
+    environment:
+      DB_STORE: /tmp/rgit.db
+      SCAN_PATH: /git
+      BIND_ADDRESS: "[::]:8000"
+    volumes:
+      - "/mnt/repos:/git"
