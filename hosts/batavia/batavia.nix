@@ -13,11 +13,13 @@
 
   environment.systemPackages = with pkgs; [
     inputs.agenix.packages."${system}".default
+    podman-compose
   ];
 
   # User groups
   users.groups.git = {};
-  users.users.rdrachmanto.extraGroups = [ "git" ];
+  users.groups.podman = {};
+  users.users.rdrachmanto.extraGroups = [ "git" "podman" ];
   users.users.legit.extraGroups = [ "git" ];
 
   programs.zsh.enable = true;
@@ -85,27 +87,27 @@
     };
   };
 
-  services.gatus = {
-    enable = true;
-    settings = {
-      web.port = 3230;
-      endpoints = [
-        {
-          name = "Portfolio Website";
-	  group = "Core";
-	  url = "https://rdrachmanto.github.io";
-	  interval = "5m";
-	  conditions = [
-	    "[STATUS] == 200"
-	  ];
-        }
-      ];
-    };
-  };
+  # services.gatus = {
+  #   enable = true;
+  #   settings = {
+  #     web.port = 3230;
+  #     endpoints = [
+  #       {
+  #         name = "Portfolio Website";
+  #         group = "Core";
+  #         url = "https://rdrachmanto.github.io";
+  #         interval = "5m";
+  #         conditions = [
+  #           "[STATUS] == 200"
+  #         ];
+  #       }
+  #     ];
+  #   };
+  # };
 
-  services.glances = {
-    enable = true;
-  };
+  # services.glances = {
+  #   enable = true;
+  # };
 
   services.legit = {
     enable = true;
@@ -169,6 +171,15 @@
   services.samba-wsdd = {
     enable = true;
     openFirewall = true;
+  };
+
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
+    };
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 ];

@@ -1,0 +1,6 @@
+endpoints:
+  - name: Portfolio Website
+    url: https://rdrachmanto.github.io
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
