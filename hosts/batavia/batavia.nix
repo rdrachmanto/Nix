@@ -14,12 +14,18 @@
   environment.systemPackages = with pkgs; [
     inputs.agenix.packages."${system}".default
     podman-compose
+    neovim
   ];
 
   # User groups
   users.groups.git = {};
   users.groups.podman = {};
-  users.users.rdrachmanto.extraGroups = [ "git" "podman" ];
+  
+  users.users.rd = {
+    extraGroups = [ "git" "podman" ];
+    linger = true;
+    autoSubUidGidRange = true;
+  };
 
   programs.zsh.enable = true;
 
@@ -79,53 +85,25 @@
       bind-dynamic = true;
 
       local = "/lab.rdrachmanto.dev/";
-      address = "/lab.rdrachmanto.dev/100.109.117.96";
+      address = "/lab.rdrachmanto.dev/100.118.182.21";
 
       domain-needed = true;
       bogus-priv = true;
     };
   };
 
-  services.samba = {
-    enable = true;
-    securityType = "user";
-    openFirewall = true;
-    settings = {
-      global = {
-        "workgroup" = "WORKGROUP";
-        "server string" = "smbnix";
-        "netbios name" = "smbnix";
-        "security" = "user";
-        "hosts allow" = "127.0.0.1 100.";
-        "hosts deny" = "0.0.0.0/0";
-        "guest account" = "nobody";
-        "map to guest" = "bad user";
-      };
-      "Public" = {
-        "path" = "/mnt/shares/Public";
-        "browseable" = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "create mask" = "0644";
-        "directory mask" = "0755";
-        "force user" = "rdrachmanto";
-        "force group" = "users";
-      };
-    };
-  };
-
-  services.samba-wsdd = {
-    enable = true;
-    openFirewall = true;
-  };
-
   virtualisation = {
     containers.enable = true;
+    quadlet.enable = true;
     podman = {
       enable = true;
       dockerCompat = true;
       defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
     };
+  };
+
+  virtualisation.oci-containers = {
+    backend = "podman";
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 ];
