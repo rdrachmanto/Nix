@@ -37,7 +37,7 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.rdrachmanto = {
+  users.users.rd = {
     isNormalUser = true;
     description = "Rakandhiya Daanii Rachmanto";
     extraGroups = [

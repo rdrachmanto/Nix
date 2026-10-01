@@ -3,14 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     agenix.url = "github:ryantm/agenix";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, quadlet-nix, ... }@inputs:
     let
       system = "x86_64-linux";
     in {
@@ -27,6 +26,12 @@
         modules = [
           ./hosts/batavia/batavia.nix
           inputs.agenix.nixosModules.default
+	  quadlet-nix.nixosModules.quadlet
+	  home-manager.nixosModules.home-manager
+	  {
+            home-manager.extraSpecialArgs = { inherit inputs; };
+	    home-manager.users.rd = import ./hosts/batavia/home.nix;
+	  }
         ];
       };
       nixosConfigurations.alexandria = nixpkgs.lib.nixosSystem {
