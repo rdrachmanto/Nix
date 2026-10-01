@@ -1,6 +1,6 @@
 let
-  batavia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDfNAB5msmswUFTj0qRjF8zSBOkTmdhVSnvf45rVX0r5 root@nixos";
+  rd-batavia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIMFZElz6ty3XrdBU8zCTaF+wDWG+GCP1nesxk1u7Y/F rd@rd-batavia";
+  root-batavia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+pq0WdRG2FNQQt33t0nTUmE+3NBDBjFV43nF2BHEki root@nixos";
 in {
-  "caddy.age".publicKeys = [batavia];
-  "miniflux.age".publicKeys = [batavia];
+  "caddy.age".publicKeys = [rd-batavia root-batavia];
 }
