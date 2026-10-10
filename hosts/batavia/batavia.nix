@@ -20,9 +20,10 @@
   # User groups
   users.groups.git = {};
   users.groups.podman = {};
+  users.groups.syncthing = {};
   
   users.users.rd = {
-    extraGroups = [ "git" "podman" ];
+    extraGroups = [ "git" "podman" "syncthing" ];
     linger = true;
     autoSubUidGidRange = true;
   };
@@ -46,7 +47,7 @@
     enable = true;
     package = pkgs.caddy.withPlugins {
       plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
-      hash = "sha256-MlKX2obWac+jP4j9UHFMxsY/DRaqw9JCVAdI7erhFwo=";
+      hash = "sha256-ayBJpLRQtQ7YmTLhMM63ECmvPcQwOPWe6VSCCotPbnA=";
     }; 
     globalConfig = ''    
       cert_issuer acme {
@@ -92,6 +93,57 @@
     };
   };
 
+  services.syncthing = {
+    enable = true;
+    user = "syncthing";
+    group = "syncthing";
+    dataDir = "/var/lib/syncthing"; 
+    configDir = "/var/lib/syncthing/.config/syncthing";
+    openDefaultPorts = true;
+    guiAddress = "0.0.0.0:8384";
+
+    overrideDevices = true;
+    overrideFolders = true;
+
+    settings = {
+      devices = {
+        "rd-x1carbon" = { 
+          id = "KGSEPJB-6647H6P-CDFAMMA-AP6QOZ6-3CKTHD4-O5G76I6-AE555ZC-XSMRWAX";
+          addresses = [ "tcp://100.111.30.10" ];
+        };
+      };
+      folders = {
+        "Documents" = {
+          path = "/mnt/internal/shares/Documents";
+          devices = [ "rd-x1carbon" ];
+          versioning = {
+            type = "staggered";
+            params = { cleanInterval = "3600"; maxAge = "2592000"; };
+          };
+        };
+        "Research" = {
+          path = "/mnt/internal/shares/Research";
+          devices = [ "rd-x1carbon" ];
+          ignorePerms = false;
+          ignorePatterns = [
+            "**/.venv"
+            "**/node_modules"
+            "**/__pycache__"
+            "**/target"
+            "**/.vscode"
+            "**/.idea"
+            "**/*.o"
+            "**/*.pyc"
+          ];
+          versioning = {
+            type = "staggered";
+            params = { cleanInterval = "3600"; maxAge = "2592000"; };
+          };
+        };
+      };
+    };
+  };
+
   virtualisation = {
     containers.enable = true;
     quadlet.enable = true;
@@ -106,7 +158,7 @@
     backend = "podman";
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 8384 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   system.stateVersion = "25.11";

@@ -6,6 +6,7 @@ in {
 
   systemd.user.tmpfiles.rules = [
     "d ${dataDir}/navidrome/data 0750 - - -"
+    "d ${dataDir}/gitore 0750 - - -"
   ];
 
   virtualisation.quadlet = {
@@ -59,11 +60,12 @@ in {
 	autoUpdate = "registry";
 	volumes = [
 	  "/mnt/internal/repos:/git"
+	  "${dataDir}/gitore:/data"
 	];
 	environments = {
 	  SCAN_PATH = "/git";
 	  BIND_ADDRESS = "[::]:8000";
-	  DB_STORE = "/tmp/rgit.db";
+	  DB_STORE = "/data/rgit.db";
 	}; 
       };
       serviceConfig = {
