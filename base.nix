@@ -6,13 +6,11 @@
   networking.networkmanager = {
     enable = true;
     plugins = with pkgs; [
-      networkmanager-fortisslvpn
       networkmanager-iodine
       networkmanager-l2tp
       networkmanager-openconnect
       networkmanager-openvpn
-      networkmanager-vpnc
-      networkmanager-sstp
+      networkmanager-libreswan
     ];
   };
   networking.firewall.allowedUDPPorts = [ 53 67 ];
@@ -62,6 +60,10 @@
     vim
     curl
     wget
+    stow
+    fd
+    ripgrep
+    fzf
   ];
 
   # Default services that must be installed everywhere
