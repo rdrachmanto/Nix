@@ -57,13 +57,22 @@
   environment.localBinInPath = true;
   environment.systemPackages = with pkgs; [
     git
-    vim
+    neovim
     curl
     wget
     stow
     fd
     ripgrep
     fzf
+    nmap
+    lshw
+    unzip
+    gzip
+    busybox
+    dig
+    pciutils
+    htop
+    zellij
   ];
 
   # Default services that must be installed everywhere

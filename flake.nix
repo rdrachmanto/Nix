@@ -4,11 +4,21 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     agenix.url = "github:ryantm/agenix";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
+    noctalia = {
+      url = "github:noctalia-dev/noctalia/cachix";
+    };
   };
 
+  nixConfig = {
+    extra-substituters = [ "https://noctalia.cachix.org" ];
+    extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
+  };
+  
   outputs = { self, nixpkgs, home-manager, quadlet-nix, ... }@inputs:
     let
       system = "x86_64-linux";

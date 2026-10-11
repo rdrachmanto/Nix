@@ -15,62 +15,34 @@
   networking.hostName = "rd-thinkpad";
 
   environment.systemPackages = with pkgs; [
-    wget
-    curl
-    git
-    tmux
-    fzf
-    fd
-    ripgrep
-
     cliphist
-    nmap
     polkit
-    stow
-    lshw
-    unzip
-    gzip
-    busybox
-    dig
-    pciutils
 
     # WM-specific settings
     # bar, notifications, OSD, launcher, etc.
-    awww
-    waybar
-    swaylock
-    swaynotificationcenter
-    pwvucontrol
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     vicinae
+    brightnessctl
 
     # Desktop
-    via                         # keyboard configurator
     firefox
     alacritty
+
+    adwaita-icon-theme
     nautilus
     udiskie
+    
     celluloid
     zathura
     onlyoffice-desktopeditors
-    libreoffice
     swayimg
-    gapless
+
+    powertop
+    nvtopPackages.nvidia
 
     # Virtualization
     distrobox
     rpi-imager
-
-    # Trying out some packages/desktop apps!
-    
-    # Niceties
-    htop
-
-    # Editors
-    
-    
-    # academia
-    drawio
-    zotero
 
     (pkgs.texlive.combine {
       inherit (pkgs.texlive) scheme-medium
@@ -107,6 +79,7 @@
     # R  # Don't forget to do `install.packages("languageserver")` in the R console
     
     # Dev Niceties
+    vscode-fhs
     
     # Niri-specific
     xwayland-satellite
@@ -117,28 +90,6 @@
     
     niri.enable = true;
     xwayland.enable = true;
-
-    # dms-shell = {
-    #   enable = true;
-    #   quickshell.package = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
-      
-    #   systemd = {
-    #     enable = true;
-    #     restartIfChanged = true;
-    #   };
-
-    #   enableSystemMonitoring = true;
-    #   # enableClipboard = true;
-    #   enableVPN = true;
-    #   enableAudioWavelength = true;
-    #   enableCalendarEvents = true;
-    #   enableDynamicTheming = true;
-    # };
-
-    nm-applet = {
-      enable = true;
-      indicator = true;
-    };
 
     neovim = {
       enable = true;
@@ -201,24 +152,18 @@
       "modesetting"
       "nvidia"
     ];
-    displayManager.gdm.enable = true;
     flatpak.enable = true;
     udisks2.enable = true;
     gvfs.enable = true;
     upower = {
       enable = true;
     };
-    openssh.enable = true;
     fwupd.enable = true;
     emacs = {
       enable = true;
       defaultEditor = true;
       startWithGraphical = true;
       package = pkgs.emacs-pgtk;
-    };
-
-    blueman = {
-      enable = true;
     };
 
     auto-cpufreq = {
@@ -256,8 +201,6 @@
           enable = true;
           enableOffloadCmd = true;
         };
-        # sync.enable = true;
-
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
       };
