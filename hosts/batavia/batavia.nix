@@ -45,6 +45,7 @@
 
   services.caddy = {
     enable = true;
+    email = "rakandhiya.daanii@gmail.com";
     package = pkgs.caddy.withPlugins {
       plugins = [ "github.com/caddy-dns/porkbun@v0.3.1" ];
       hash = "sha256-ayBJpLRQtQ7YmTLhMM63ECmvPcQwOPWe6VSCCotPbnA=";
@@ -72,7 +73,13 @@
       reverse_proxy http://127.0.0.1:4533
     '';
     virtualHosts."git.lab.rdrachmanto.dev".extraConfig = ''
-      reverse_proxy http://127.0.0.1:3333
+      reverse_proxy http://127.0.0.1:8300
+    '';
+    virtualHosts."reader.lab.rdrachmanto.dev".extraConfig = ''
+      reverse_proxy http://127.0.0.1:4567
+    '';
+    virtualHosts."rss.lab.rdrachmanto.dev".extraConfig = ''
+      reverse_proxy http://127.0.0.1:8095
     '';
   };
   systemd.services.caddy.serviceConfig.EnvironmentFile = [
@@ -82,6 +89,10 @@
   services.dnsmasq = {
     enable = true;
     settings = {
+      no-resolv = true;
+      server = [ "128.192.0.1" "128.192.0.0" ];
+      dns-loop-detect = true;
+
       interface = "tailscale0";
       bind-dynamic = true;
 
@@ -158,7 +169,7 @@
     backend = "podman";
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 8384 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 8384 8300 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   system.stateVersion = "25.11";

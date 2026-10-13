@@ -77,7 +77,10 @@
 
   # Default services that must be installed everywhere
   # (1) tailscale
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    extraUpFlags = [ "--accept-dns=false" ];
+  };
 
   system.stateVersion = "25.11";
 }
