@@ -87,7 +87,14 @@
 
   programs = {
     nix-ld.enable = true;
-    
+    nix-ld.libraries = with pkgs; [
+      stdenv.cc.cc.lib   # libstdc++
+      zlib
+      glib
+      libGL
+      libX11
+    ];
+
     niri.enable = true;
     xwayland.enable = true;
 
@@ -175,6 +182,38 @@
       settings.charger = {
         governor = "performance";
         turbo = "auto";
+      };
+    };
+
+    syncthing = {
+      enable = true;
+      user = "rd";
+      dataDir = "/home/rd";
+
+      overrideDevices = true;
+      overrideFolders = true;
+      guiAddress = "127.0.0.1:8384";
+      openDefaultPorts = true;
+      
+      settings = {
+        devices = {
+          "rd-batavia" = {
+            id = "MGJE545-NVYE7C7-L6QWLCQ-DERIKOF-LS3XWYC-YFE4JX2-LAAX5WO-MNNJ2AR";
+            addresses = [ "tcp://100.118.182.21" ];
+          };
+        };
+        folders = {
+          "Documents" = {
+            path = "/home/rd/Documents";
+            devices = [ "rd-batavia" ];
+            ignorePerms = false;
+          };
+          "Research" = {
+            path = "/home/rd/Research";
+            devices = [ "rd-batavia" ];
+            ignorePerms = false;
+          };
+        };
       };
     };
   };
