@@ -1,14 +1,23 @@
 { inputs, config, ... }:
 let
   dataDir = "${config.home.homeDirectory}/services";
+  mntDir = "/mnt/internal/services";
+
+  forgejoDir = "${mntDir}/forgejo";
+  fusionDir = "${mntDir}/fusion";
+  suwayomiDir = "${mntDir}/suwayomi";
+
+  navidromeDataDir = "${mntDir}/navidrome/data";
+  navidromeMusicDir = "${mntDir}/navidrome/music";
 in {
   imports = [ inputs.quadlet-nix.homeManagerModules.quadlet ];
 
   systemd.user.tmpfiles.rules = [
-    "d ${dataDir}/navidrome/data 0750 - - -"
-    "d ${dataDir}/gitore 0750 - - -"
-    "d ${dataDir}/fusion 0750 - - -"
-    "d ${dataDir}/forgejo 0750 - - -"
+    "d ${navidromeDataDir} 0750 - - -"
+    "d ${navidromeMusicDir} 0750 - - -"
+    "d ${fusionDir} 0750 - - -"
+    "d ${forgejoDir} 0750 - - -"
+    "d ${suwayomiDir} 0750 - - -"
   ];
 
   virtualisation.quadlet = {
@@ -39,7 +48,7 @@ in {
         publishPorts = [ "127.0.0.1:8095:8080" ];
         autoUpdate = "registry";
         volumes = [
-          "${dataDir}/fusion:/data"
+          "${fusionDir}:/data"
         ];
         environments = {
           FUSION_ALLOW_EMPTY_PASSWORD = "true";
@@ -58,7 +67,7 @@ in {
         image = "codeberg.org/forgejo/forgejo:15-rootless";
         userns = "keep-id";
         volumes = [ 
-          "${dataDir}/forgejo:/var/lib/gitea" 
+          "${forgejoDir}:/var/lib/gitea" 
           "/etc/localtime:/etc/localtime:ro"
         ];
         publishPorts = [
@@ -80,8 +89,8 @@ in {
         publishPorts = [ "127.0.0.1:4533:4533" ];
         autoUpdate = "registry";
         volumes = [
-          "${dataDir}/navidrome/data:/data"
-          "/mnt/internal/music:/music:ro"
+          "${navidromeDataDir}:/data"
+          "${navidromeMusicDir}:/music:ro"
         ];
         environments = {
           ND_BASEURL = "https://music.lab.rdrachmanto.dev";
@@ -99,7 +108,9 @@ in {
         image = "ghcr.io/suwayomi/suwayomi-server:stable";
         publishPorts = [ "127.0.0.1:4567:4567" ];
         userns = "keep-id";
-        volumes = [ "/mnt/internal/readers:/home/suwayomi/.local/share/Tachidesk" ];
+        volumes = [ 
+          "${suwayomiDir}:/home/suwayomi/.local/share/Tachidesk" 
+        ];
         environments = {
           TZ = "America/New_York";
           DOWNLOAD_AS_CBZ = "true";

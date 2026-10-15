@@ -169,7 +169,7 @@
     backend = "podman";
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 8384 8300 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 4533 9000 8384 8300 4567 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   system.stateVersion = "25.11";
