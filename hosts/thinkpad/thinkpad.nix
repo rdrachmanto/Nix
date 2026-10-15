@@ -14,9 +14,12 @@
   # Set device hostname
   networking.hostName = "rd-thinkpad";
 
+  # Enable Ethernet sharing Wifi
+  networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
+
+
   environment.systemPackages = with pkgs; [
     cliphist
-    polkit
 
     # WM-specific settings
     # bar, notifications, OSD, launcher, etc.
@@ -42,7 +45,6 @@
 
     # Virtualization
     distrobox
-    rpi-imager
 
     (pkgs.texlive.combine {
       inherit (pkgs.texlive) scheme-medium
@@ -173,6 +175,14 @@
       package = pkgs.emacs-pgtk;
     };
 
+    greetd = {
+      enable = true;
+      settings.default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd niri-session";
+        user = "greeter";
+      };
+    };
+
     auto-cpufreq = {
       enable = true;
       settings.battery = {
@@ -183,6 +193,11 @@
         governor = "performance";
         turbo = "auto";
       };
+    };
+
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
     };
 
     syncthing = {
@@ -263,4 +278,5 @@
   '';  
 
   security.polkit.enable = true;
+  security.soteria.enable = true;
 }
